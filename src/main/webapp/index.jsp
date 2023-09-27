@@ -14,6 +14,7 @@
 		<li><a href="v3/List.jsp">네번째 버전(BEAN)</a></li>
 		<li><a href="v4/List.jsp">다섯번째 버전(패아장)</a></li>
 		<li><a href="v5/List.jsp">여섯번째 버전(답변)</a></li>
+		<li><a href="v6/List.jsp">일곱번째 버전(MVC패턴)</a></li>
 	</ul>
 </body>
 </html>

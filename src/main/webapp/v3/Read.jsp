@@ -1,54 +1,18 @@
 <%@ page contentType="text/html; charset=EUC-KR"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="dbcp.DBConnectionMgr" %>
+<jsp:useBean id="dao" class="mybean.BoardDao" />
+<jsp:useBean id="dto" class="mybean.Board" />
 <html>
 <head><title>JSPBoard</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+
 <%
 	String b_num = request.getParameter("b_num");
 	
-	Connection con = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	DBConnectionMgr pool = null;
-	
-	String name = "";
-	String regdate = "";
-	String email = "";
-	String home = "";
-	String subject = "";
-	String content = "";
-	String ip = "";
-	int count = 0;
-	
-	try{
-		pool = DBConnectionMgr.getInstance();
-		con = pool.getConnection();
-		
-		
-		String sql = "select * from tblboard where b_num=" + b_num;
-		stmt = con.createStatement();
-		rs = stmt.executeQuery(sql);
-		
-		// 값이 있을 때만 처리하게
-		if(rs.next()){
-			name = rs.getString("b_name");
-			regdate = rs.getString("b_regdate");
-			email = rs.getString("b_email");
-			home = rs.getString("b_homepage");
-			subject = rs.getString("b_subject");
-			content = rs.getString("b_content").replace("\n", "<br>");
-			ip = rs.getString("b_ip");
-			count = rs.getInt("b_count");
-		}
-	}
-	catch(Exception e){System.out.println("Read.jsp: " + e);}
-	finally{
-		pool.freeConnection(con, stmt, rs);
-	}
+	String sql = "select * from tblboard where b_num=" + b_num;
+	//dao.getBoardList(dto);
 %>
 
 
@@ -62,26 +26,28 @@
    <table border=0 cellpadding=3 cellspacing=0 width=100%> 
     <tr> 
 	 <td align=center bgcolor=#dddddd width=10%> 이 름 </td>
-	 <td bgcolor=#ffffe8><%=name %></td>
+	 <td bgcolor=#ffffe8> <jsp:getProperty name="dto" property="b_name"/></td>
 	 <td align=center bgcolor=#dddddd width=10%> 등록날짜 </td>
-	 <td bgcolor=#ffffe8><%=regdate %></td>
+	 <td bgcolor=#ffffe8><jsp:getProperty name="dto" property="b_regdate"/></td>
 	</tr>
     <tr>
 	 <td align=center bgcolor=#dddddd width=10%> 메 일 </td>
-	 <td bgcolor=#ffffe8 ><%=email %></td> 
+	 <td bgcolor=#ffffe8 ><jsp:getProperty name="dto" property="b_name"/></td> 
 	 <td align=center bgcolor=#dddddd width=10%> 홈페이지 </td>
-	 <td bgcolor=#ffffe8 ><a href="http://" target="_new">http://<%=home %></a></td> 
+	 <td bgcolor=#ffffe8 ><a href="http://" target="_new">http://
+	 <jsp:getProperty name="dto" property="b_name"/></a></td> 
 	</tr>
     <tr> 
      <td align=center bgcolor=#dddddd> 제 목</td>
-     <td bgcolor=#ffffe8 colspan=3><%=subject %></td>
+     <td bgcolor=#ffffe8 colspan=3><jsp:getProperty name="dto" property="b_name"/></td>
    </tr>
    <tr> 
-    <td colspan=4><%=content %></td>
+    <td colspan=4><jsp:getProperty name="dto" property="b_name"/></td>
    </tr>
    <tr>
     <td colspan=4 align=right>
-    <%=ip %> 로 부터 글을 남기셨습니다./  조회수 : <%=count %>
+    <jsp:getProperty name="dto" property="b_ip"/> 로 부터 글을 남기셨습니다./  
+    조회수 : <jsp:getProperty name="dto" property="b_count"/>
     </td>
    </tr>
    </table>

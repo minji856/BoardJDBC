@@ -43,7 +43,7 @@ public class BoardDao {
 			} catch (SQLException e) { e.printStackTrace(); }
 	}
 	
-	// List.jsp 컬렉션 생성 indexproperty 여서 자바코드로 해결해야한다 jstl 배우기전엔 불가능
+	// List.jsp 컬렉션 생성 index property 여서 자바코드로 해결해야한다 jstl 배우기전엔 불가능
 	public List getBoardList() {
 		// 에러날게 없으니까 try 밖으로 뺌
 		String sql = "select b_num, b_subject, b_name, b_regdate, b_count from tblboard";
@@ -78,4 +78,31 @@ public class BoardDao {
 		}
 		return vector;
 	}
+	
+	/** PostProc.jsp 하나의 글을 묶어서 전달 **/
+	public void setBoard(Board board) {
+		String sql = "insert into tblboard(b_num, " +
+				"b_name, b_email, b_homepage, b_subject, b_content, " +
+				"b_pass, b_count, b_ip, b_regdate , pos, depth) " +
+				"values(seq_b_num.nextVal, ?,?,?,?,?,?, 0, ?, sysdate , 0, 0)";
+		try {
+			con = ds.getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, board.getB_name());
+			stmt.setString(2, board.getB_email());
+			stmt.setString(3, board.getB_homepage());
+			stmt.setString(4, board.getB_subject());
+			stmt.setString(5, board.getB_content());
+			stmt.setString(6, board.getB_pass());
+			stmt.setString(7, board.getB_ip());
+			stmt.executeUpdate();			
+		}
+		catch(Exception e){
+			System.out.println("serBoard" + e);
+		}
+		finally {
+			freeConnection();
+			}
+		}
+	
 }
