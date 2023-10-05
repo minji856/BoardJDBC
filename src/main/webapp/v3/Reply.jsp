@@ -20,13 +20,14 @@
 <br><br>
 <table width=80% cellspacing=0 cellpadding=3>
  <tr>
-  <td bgcolor=84F399 height=25 align=center>답변쓰기</td>
+  <td bgcolor=84F399 height=25 align=center>답변 쓰기</td>
  </tr>
 </table>
 <br>
 <table width=80% cellspacing=0 cellpadding=3 align=center>
 <form name=post method=post action="ReplyProc.jsp" >
 <input type="hidden" name="b_ip" value="<%=request.getRemoteAddr() %>" />
+<input type="hidden" name="b_num" value="<%=b_num %>" />  <!-- 부모글 번호를 넘겨줘야한다 -->
  <tr>
   <td align=center>
    <table border=0 width=100% align=center>

@@ -5,7 +5,6 @@
 <head><title>JSPBoard</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
 
 <%
@@ -107,6 +106,7 @@
   <td align=center colspan=2> 
 	<hr size=1>
 	[ <a href="javascript:list()">목 록</a> | 
+	<!-- 부모글의 번호 -->
 	<a href="Reply.jsp?b_num=<%=b_num%>">답변</a> |
 	<a href="Update.jsp?b_num=<%=b_num%>">수 정</a> |
 	<a href="Delete.jsp?b_num=<%=b_num%>">삭 제</a> ]<br>

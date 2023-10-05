@@ -4,7 +4,7 @@
 
 <%!
 	int totalRecord = 0; // 총 글의 갯수
-	int numPerPage = 5; // 한 페이지당 보여질 글의 갯수
+	int numPerPage = 20; // 한 페이지당 보여질 글의 갯수
 	int totalPage = 0; // 총 페이지 수. 계산해서 나와야하니까 우선 0. 딱 맞아 떨어지지 않는다 짜투리 페이지
 	int nowPage = 0; // 현재 페이지
 	int beginPerPage = 0; // 페이지별 시작 번호
@@ -87,7 +87,16 @@
 	%>
 	<tr>
 		<td><%=board.getB_num() %></td>
-		<td><a href="Read.jsp?b_num=<%=board.getB_num()%>">
+		<td>
+			<%=dao.useDepth(board.getDepth()) %>
+			<%
+				if(board.getDepth() > 0){
+			%>
+				<img src="../images/re.gif"/>
+			<%
+			}
+			%>
+			<a href="Read.jsp?b_num=<%=board.getB_num()%>">
 			<%=board.getB_subject() %></a></td>
 		<td><%=board.getB_name()%></td>
 		<td><%=board.getB_regdate() %></td>
