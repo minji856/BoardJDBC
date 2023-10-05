@@ -244,24 +244,30 @@ public class BoardDao {
 			} catch (SQLException e) { e.printStackTrace(); }
 	}
 	
-	// List.jsp 
+	/* List.jsp 컬렉션 생성 index property 여서 자바코드로 해결해야한다 JSTL 배우기전엔 액션 태그불가능
+	 * public List getBoardList()*/ 
 	public List getBoardList(String keyField, String keyWord) {
-		String sql = null; 
+		String sql = null; // 에러날게 없으니까 try 블럭 밖으로 뺌
+		// 검색어 여부
 		if(keyWord == null || keyWord.isEmpty()) {
 				sql = "select * from tblboard order by pos";
 		}
+		// 가장 최신순으로 내림차순 답변기능 생기고나서 order by pos 로 정렬
 		else {
 			sql = "select * from tblboard where " + keyField +
 					" like '%" + keyWord +
 					"%' order by pos";
 		}
+		// List 자식이니까 Vector 가 동기화된 컬렉션이여서 안전하게 사용가능
 		Vector vector = new Vector();
 		
 		try{
 			con = ds.getConnection();
 			stmt = con.prepareStatement(sql);
+			// 실행 안 시켜주면 된다 이미 db 연결은 끝나서
 			rs = stmt.executeQuery();
 			
+			// 글이 한개가 아니니까 컬렉션에 담을꺼다 일단 모든 데이터를 담아주기
 			while(rs.next()){
 				Board board = new Board();
 				board.setB_subject(rs.getString("b_subject"));
@@ -275,6 +281,7 @@ public class BoardDao {
 				board.setB_homepage(rs.getString("b_homepage"));
 				board.setB_pass(rs.getString("b_pass"));
 				
+				// vector 라는 통에다가 board 를 하나씩 넣어준것
 				vector.add(board);
 			}
 		}
@@ -287,6 +294,7 @@ public class BoardDao {
 		return vector;
 	}
 	
+	// 기존에 입력된 값들의 pos +1
 	public void updatePos(Connection con) {
 		try {
 			String sql = "update tblboard set pos = pos + 1";
@@ -298,7 +306,7 @@ public class BoardDao {
 		}
 	}
 	
-	/** PostProc.jsp, ReplyProc.jsp **/
+	/** PostProc.jsp, ReplyProc.jsp 하나의 글을 묶어서 전달 **/
 	public void setBoard(Board board) {
 		String sql = "insert into tblboard(b_num, " +
 				"b_name, b_email, b_homepage, b_subject, b_content, " +
@@ -327,7 +335,9 @@ public class BoardDao {
 			}
 		}
 
-	// Read.jsp, Update.jsp, Reply.jsp 
+	/* Read.jsp, Update.jsp, Reply.jsp getBoard 메서드 하나로 2가지 jsp 에서 쓸 수 있음
+	 *  실제 화면에 뿌려주는거 해당하는 글 번호를 조회해서 return으로 꺼내준다
+	 */
 	public Board getBoard(int b_num){
 		String sql;
 		Board result = new Board();
@@ -402,6 +412,7 @@ public class BoardDao {
 		finally{ freeConnection(); }
 	}
 	
+	// 선택한 부모의 pos 값을 받아와야한다 통째로 받던가 pos만 받던가 (부모글의 정보)
 	public void replyUpdatePos(Board board) {
 		try {
 			con = ds.getConnection();
@@ -416,12 +427,13 @@ public class BoardDao {
 		finally{ freeConnection(); }
 	}
 	
-	// ReplyProc.jsp 
+	// ReplyProc.jsp 부모글의 정보를 넘겨줘야함 pos, depth만 부모글 정보 가져오기
 	public void replyBoard (Board board) {
 		String sql = "insert into tblboard(b_num," +
 				"b_name, b_email, b_homepage, b_subject, b_content, " +
 				"b_pass, b_count, b_ip, b_regdate , pos, depth) " +
 				"values(seq_b_num.nextVal, ?,?,?,?,?,?, 0, ?, sysdate , ?, ?)";
+											/* pos, depth 값에 0, 0 을 ? , ? 로 */
 		try {
 			con = ds.getConnection();
 			
